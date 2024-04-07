@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>WebSocket Chat</h1>
+  <input id="room" placeholder="Room">
+  <button onclick="joinRoom()">Join Room</button>
+  <input id="message" placeholder="Message">
+  <button onclick="sendMessage()">Send Message</button>
+  <ul id="messages"></ul>
+
+  <script>
+    const socket = io();
+
+    function joinRoom() {
+      const room = document.getElementById('room').value;
+      socket.emit('joinRoom', room);
+    }
+
+    function sendMessage() {
+      const room = document.getElementById('room').value;
+      const message = document.getElementById('message').value;
+      socket.emit('message', { room, message });
+    }
+
+    socket.on('message', (message) => {
+      const li = document.createElement('li');
+      li.textContent = message;
+      document.getElementById('messages').appendChild(li);
+    });
+  </script>
+</body>
+</html>
